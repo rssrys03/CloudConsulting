@@ -3,7 +3,22 @@
     <custom>false</custom>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Opportunity_Line_Item__c.Quantity__c</field>
+        <field>Resource_Allocation__c.EndDate__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Resource_Allocation__c.Resources__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Resource_Allocation__c.Sold_Roles__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Resource_Allocation__c.StartDate__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <objectPermissions>
@@ -12,7 +27,7 @@
         <allowEdit>true</allowEdit>
         <allowRead>true</allowRead>
         <modifyAllRecords>true</modifyAllRecords>
-        <object>Opportunity_Line_Item__c</object>
+        <object>Resource_Allocation__c</object>
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
     <userLicense>Salesforce</userLicense>
