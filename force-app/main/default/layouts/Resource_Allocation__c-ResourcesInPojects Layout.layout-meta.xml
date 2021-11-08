@@ -16,7 +16,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Sold_Roles__c</field>
+                <field>Required_Role__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
