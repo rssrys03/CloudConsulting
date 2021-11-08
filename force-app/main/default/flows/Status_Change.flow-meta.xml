@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Missing_requeriments</name>
+        <label>Missing requeriments</label>
+        <locationX>814</locationX>
+        <locationY>118</locationY>
+        <actionName>Project__c.Hours_to_cover_or_Squad_Lead_Missing</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <apiVersion>53.0</apiVersion>
+    <decisions>
+        <description>If Total Covered Hour is different from Total  sold Hours or there is no assigned Squad Lead must alert the PM</description>
+        <name>Meet_the_requirements</name>
+        <label>Meet the requirements?</label>
+        <locationX>577</locationX>
+        <locationY>218</locationY>
+        <defaultConnector>
+            <targetReference>Update_Status_to_In_progress</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Project_can_t_pass_to_In_Progress</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Total_Covered_Hours__c</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <elementReference>$Record.Total_Hours_Sold__c</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Squad_Lead__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Missing_requeriments</targetReference>
+            </connector>
+            <label>Project can&apos;t pass to In Progress</label>
+        </rules>
+    </decisions>
+    <interviewLabel>Status Change {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Status Change</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Status_to_Completed</name>
+        <label>Update Status to Completed</label>
+        <locationX>610</locationX>
+        <locationY>49</locationY>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Status_to_In_progress</name>
+        <label>Update Status to In progress</label>
+        <locationX>846</locationX>
+        <locationY>321</locationY>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>In Progress</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>54</locationX>
+        <locationY>10</locationY>
+        <object>Project__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <scheduledPaths>
+            <name>End_Date</name>
+            <connector>
+                <targetReference>Update_Status_to_Completed</targetReference>
+            </connector>
+            <label>End Date</label>
+            <offsetNumber>0</offsetNumber>
+            <offsetUnit>Minutes</offsetUnit>
+            <recordField>End_Date__c</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <scheduledPaths>
+            <name>Start_Date</name>
+            <connector>
+                <targetReference>Meet_the_requirements</targetReference>
+            </connector>
+            <label>Start Date</label>
+            <offsetNumber>0</offsetNumber>
+            <offsetUnit>Minutes</offsetUnit>
+            <recordField>Start_Date__c</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

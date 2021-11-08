@@ -1,0 +1,18 @@
+<html><head>
+	<title></title>
+</head>
+<body style="height: auto; min-height: auto;"><b>&nbsp;Hi,&nbsp;{{{Project__c.Project_Manager__c}}}.</b><br />
+<br />
+We need you to check your Project :&nbsp;{{{Project__c.Name}}}. It can not start until you check out this two fields:
+<ul>
+	<li>Squad Lead:&nbsp;{{{Project__c.Squad_Lead__c}}} .</li>
+	<li>Total Sold Hours:&nbsp;{{{Project__c.Total_Hours_Sold__c}}} .</li>
+	<li>Total Covered Hours:&nbsp;{{{Project__c.Total_Covered_Hours__c}}} .</li>
+</ul>
+<br />
+<i><b>**Keep in mind that, you can not start if you have either no assigned squad lead or not covered the total of sold hours. This will be showed up as a blank space definition**</b></i><br />
+<br />
+Thank you.<br />
+<br />
+<u><i>Regards, CloudConsulting.</i></u>
+</body></html>
