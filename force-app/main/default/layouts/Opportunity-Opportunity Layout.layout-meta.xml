@@ -244,24 +244,19 @@
             <sortOrder>14</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>SendEmail</actionName>
+            <actionName>Edit</actionName>
             <actionType>StandardButton</actionType>
             <sortOrder>15</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>Edit</actionName>
+            <actionName>ChangeOwnerOne</actionName>
             <actionType>StandardButton</actionType>
             <sortOrder>16</sortOrder>
         </platformActionListItems>
         <platformActionListItems>
-            <actionName>ChangeOwnerOne</actionName>
-            <actionType>StandardButton</actionType>
-            <sortOrder>17</sortOrder>
-        </platformActionListItems>
-        <platformActionListItems>
             <actionName>Share</actionName>
             <actionType>StandardButton</actionType>
-            <sortOrder>18</sortOrder>
+            <sortOrder>17</sortOrder>
         </platformActionListItems>
     </platformActionList>
     <quickActionList>
@@ -314,58 +309,6 @@
         </relatedContentItems>
     </relatedContent>
     <relatedLists>
-        <fields>Product2</fields>
-        <fields>Quantity</fields>
-        <fields>UnitPrice</fields>
-        <fields>ServiceDate</fields>
-        <fields>Description</fields>
-        <relatedList>RelatedLineItemList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>TASK.SUBJECT</fields>
-        <fields>TASK.WHO_NAME</fields>
-        <fields>ACTIVITY.TASK</fields>
-        <fields>TASK.DUE_DATE</fields>
-        <fields>TASK.STATUS</fields>
-        <fields>TASK.PRIORITY</fields>
-        <fields>CORE.USERS.FULL_NAME</fields>
-        <relatedList>RelatedActivityList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>TASK.SUBJECT</fields>
-        <fields>TASK.WHO_NAME</fields>
-        <fields>ACTIVITY.TASK</fields>
-        <fields>TASK.DUE_DATE</fields>
-        <fields>CORE.USERS.FULL_NAME</fields>
-        <fields>TASK.LAST_UPDATE</fields>
-        <relatedList>RelatedHistoryList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <relatedList>RelatedNoteList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>ContactName</fields>
-        <fields>Role</fields>
-        <fields>ContactTitle</fields>
-        <fields>IsPrimary</fields>
-        <fields>ContactPhone</fields>
-        <fields>ContactEmail</fields>
-        <fields>ContactAccountName</fields>
-        <relatedList>RelatedContactRoleList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>ACCOUNT.NAME</fields>
-        <fields>PARTNER.ROLE</fields>
-        <fields>PARTNER.PRIMARY</fields>
-        <relatedList>RelatedPartnerList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <relatedList>RelatedCompetitorList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <relatedList>RelatedOpportunityHistoryList</relatedList>
-    </relatedLists>
-    <relatedLists>
         <fields>NAME</fields>
         <relatedList>Opportunity_Line_Item__c.Opportunity__c</relatedList>
     </relatedLists>
@@ -380,7 +323,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h1a0000012AH0</masterLabel>
+        <masterLabel>00h5f00000897Nb</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

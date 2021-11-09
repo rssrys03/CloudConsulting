@@ -35,7 +35,6 @@
                     <value>3</value>
                 </componentInstanceProperties>
                 <componentName>force:highlightsPanel</componentName>
-                <identifier>force_highlightsPanel</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
@@ -58,7 +57,6 @@
                     <value>true</value>
                 </componentInstanceProperties>
                 <componentName>force:relatedListContainer</componentName>
-                <identifier>force_relatedListContainer</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
@@ -69,31 +67,26 @@
         <itemInstances>
             <fieldInstance>
                 <fieldItem>Record.Name</fieldItem>
-                <identifier>RecordNameField1</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldItem>Record.Project_Manager__c</fieldItem>
-                <identifier>RecordProject_Manager_cField1</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldItem>Record.Squad_Lead__c</fieldItem>
-                <identifier>RecordSquad_Lead_cField1</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldItem>Record.Start_Date__c</fieldItem>
-                <identifier>RecordStart_Date_cField1</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldItem>Record.End_Date__c</fieldItem>
-                <identifier>RecordEnd_Date_cField1</identifier>
             </fieldInstance>
         </itemInstances>
         <name>Facet-1702e91b-0fa7-4c0a-a477-813bef8715c1</name>
@@ -103,19 +96,26 @@
         <itemInstances>
             <fieldInstance>
                 <fieldItem>Record.Status__c</fieldItem>
-                <identifier>RecordStatus_cField1</identifier>
-            </fieldInstance>
-        </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldItem>Record.OwnerId</fieldItem>
-                <identifier>RecordOwnerIdField1</identifier>
             </fieldInstance>
         </itemInstances>
         <itemInstances>
             <fieldInstance>
                 <fieldItem>Record.Account__c</fieldItem>
-                <identifier>RecordAccount_cField1</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Total_Hours_Sold__c</fieldItem>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Total_Covered_Hours__c</fieldItem>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Opportunity__c</fieldItem>
             </fieldInstance>
         </itemInstances>
         <name>Facet-e8f5a460-a687-4d61-9c9d-e762af2e48b7</name>
@@ -129,7 +129,6 @@
                     <value>Facet-1702e91b-0fa7-4c0a-a477-813bef8715c1</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column1</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -139,7 +138,6 @@
                     <value>Facet-e8f5a460-a687-4d61-9c9d-e762af2e48b7</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:column</componentName>
-                <identifier>flexipage_column2</identifier>
             </componentInstance>
         </itemInstances>
         <name>Facet-d297bc7f-5d9e-45fb-978d-e2b25f19967e</name>
@@ -157,7 +155,6 @@
                     <value>Section</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:fieldSection</componentName>
-                <identifier>flexipage_fieldSection1</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
@@ -176,7 +173,6 @@
                     <value>Required roles</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
-                <identifier>relatedListsTab</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
@@ -194,7 +190,6 @@
                     <value>Standard.Tab.detail</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
-                <identifier>detailTab</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
@@ -209,7 +204,6 @@
                     <value>maintabs</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:tabset</componentName>
-                <identifier>flexipage_tabset</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
@@ -217,24 +211,6 @@
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>cacheAge</name>
-                    <value>1440</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>reportName</name>
-                    <value>flow_screen_prebuilt_report</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>showRefreshButton</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:reportChart</componentName>
-                <identifier>flexipage_reportChart1</identifier>
-            </componentInstance>
-        </itemInstances>
         <mode>Replace</mode>
         <name>activityTabContent</name>
         <type>Facet</type>
@@ -255,7 +231,6 @@
                     <value>Standard.Tab.activity</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
-                <identifier>activityTab</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>
@@ -270,7 +245,6 @@
                     <value>sidebartabs</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:tabset</componentName>
-                <identifier>flexipage_tabset2</identifier>
             </componentInstance>
         </itemInstances>
         <mode>Replace</mode>

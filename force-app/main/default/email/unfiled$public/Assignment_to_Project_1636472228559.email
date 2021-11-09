@@ -1,0 +1,13 @@
+<html><head>
+	<title></title>
+</head>
+<body style="height: auto; min-height: auto;">Hi,&nbsp;{{{Project__c.Project_Manager__c}}}!<br />
+<br />
+Check you Project Mangement App in Salesforce. You were assigned to a new Project called : {{{Project__c.Name}}}!<br />
+<br />
+Make sure to allocate the resources before the start date; {{{Project__c.Start_Date__c}}}.<br />
+<br />
+<i>Thank you.</i><br />
+<br />
+<u><i>Regards, CloudConsulting.</i></u>
+</body></html>
