@@ -11,4 +11,15 @@
         <senderType>CurrentUser</senderType>
         <template>unfiled$public/Hours_Coverage_or_Squad_Lead_missing_1636409974260</template>
     </alerts>
+    <alerts>
+        <fullName>New_Project_created_alert</fullName>
+        <ccEmails>rosangelysreyes03@gmail.com</ccEmails>
+        <description>New Project created alert</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Assignment_to_Project_1636472228559</template>
+    </alerts>
 </Workflow>
