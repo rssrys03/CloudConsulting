@@ -42,6 +42,10 @@
                 <behavior>Edit</behavior>
                 <field>Project_Manager__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Total_Covered_Hours__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

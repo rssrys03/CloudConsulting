@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Required_Role__c</fullName>
+    <externalId>false</externalId>
+    <label>Required Role</label>
+    <referenceTo>Required_Role__c</referenceTo>
+    <relationshipLabel>Resources Allocations</relationshipLabel>
+    <relationshipName>RequiredRoles</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>
