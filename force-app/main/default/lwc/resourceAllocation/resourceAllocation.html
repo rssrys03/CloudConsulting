@@ -1,0 +1,17 @@
+<template>
+  <lightning-card
+    title="Allocate Resources"
+    icon-name="standard:customer_lifecycle_analytics"
+  >
+  <lightning-formatted-rich-text
+        value={projectDates}
+    ></lightning-formatted-rich-text>
+    <lightning-tabset variant="scoped">
+      <template for:each={requiredRoleNames} for:item="roleName">
+        <lightning-tab key={roleName} label={roleName} value={roleName}>
+          <c-users role={roleName} project={recordId}></c-users>
+        </lightning-tab>
+      </template>
+    </lightning-tabset>
+  </lightning-card>
+</template>
