@@ -1,0 +1,16 @@
+<template>
+    <lightning-tabset variant="scoped">
+        <template for:each={requiredRoleNames} for:item="roleName">
+        <lightning-tab key={roleName} label={roleName} value={roleName}>
+            <div class="slds-scrollable_y">
+                <lightning-datatable 
+                key-field="Id" 
+                data={data} 
+                onsave={handleSave} 
+                columns={columns}>
+                </lightning-datatable>
+            </div>
+        </lightning-tab>
+    </template>
+    </lightning-tabset>
+</template>
