@@ -64,13 +64,10 @@ public with sharing class AllocationFilter {
             if(resourceAllocationsByUserId.get(userID).size() > 0){
                 Boolean available = true;
                 for(Resource_Allocation__c resourceAllocatedDates : resourceAllocationsByUserId.get(userID)){
- //modificar validaciones de fecha
-                    if( ( resourceAllocatedDates.StartDate__c < ProjectStartDate && ( resourceAllocatedDates.EndDate__c < ProjectEndDate || resourceAllocatedDates.EndDate__c < ProjectStartDate ) ) || resourceAllocatedDates.StartDate__c > ProjectEndDate ){
-                        continue;
-                    }else{
+ 
+                    if( !(( resourceAllocatedDates.StartDate__c < ProjectStartDate &&  resourceAllocatedDates.EndDate__c < ProjectStartDate)|| resourceAllocatedDates.StartDate__c > ProjectEndDate))
                         available = false;
-                        break;
-                    }
+                        break; 
                 }
                 if(available){
                     filteredResourcesIds.add(userId);
