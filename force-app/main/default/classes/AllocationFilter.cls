@@ -29,23 +29,23 @@ public with sharing class AllocationFilter {
         List<Required_Role__c> requiredRoleWithProjectDates = getRequiredRoles(projectID);
         List<User> resources = findUsersWithRequiredRoles(requiredRoleWithProjectDates);
 
-        List<Id> rosurcesIdsToFilter = new List<Id>(); //(id1, id2)
+        List<Id> resourcesIdsToFilter = new List<Id>(); //(id1, id2)
         
         for(User resource : resources){
-            rosurcesToFilter.add(resource.Id);
+            resourcesIdsToFilter.add(resource.Id);
         }
         
         //recursos con fechas para comparar
         //[pepeFechasP, MAriaFechas, pepeFechaP2]
-        List<Resource_Allocation__c> resourcesAllocated = [SELECT StartDate__c, EndDate__c, Resources__c FROM Resource_Allocation__c WHERE Resource__c IN: rosurcesToFilter AND Required_Role__r.Project__r.Status__c != 'Completed'] //(id1)
+        List<Resource_Allocation__c> resourcesAllocated = [SELECT StartDate__c, EndDate__c, Resources__c FROM Resource_Allocation__c WHERE Resources__c IN: resourcesIdsToFilter AND Required_Role__r.Project__r.Status__c != 'Completed'] ;//(id1)
 
         //mapa key: userId, value: lista de fechas de proyectos (resourcesAllocated)
         //mapa -> {pepeId : [PepeFecha1, PepeFecha2]
         //        mariaIdI: [mariaFecha]}
-        Map<Id, List<Resource_Allocation__c>> resourceAllocationsByUserId = new Map<Id, List<Resource_Allocation__c>>;
+        Map<Id, List<Resource_Allocation__c>> resourceAllocationsByUserId = new Map<Id, List<Resource_Allocation__c>>();
         
         //armado de mapa con userId : lista de allocation vacia.
-        for(Id userId : rosurcesIdsToFilter){
+        for(Id userId : resourcesIdsToFilter){
             resourceAllocationsByUserId.put(userId, new List<Resource_Allocation__c>());
         }
 
@@ -55,16 +55,16 @@ public with sharing class AllocationFilter {
             }
         }
         
-        Date ProjectStartDate = requiredRoleWithProjectDates[0].Start_Date__c;
-        Date ProjectEndDate = requiredRoleWithProjectDates[0].End_Date__c;
+        Date ProjectStartDate = requiredRoleWithProjectDates[0].Project__r.Start_Date__c;
+        Date ProjectEndDate = requiredRoleWithProjectDates[0].Project__r.End_Date__c;
 
-        Set<Id> filteredResourcesIds = new List<Id>(); //guardar users Ids disponibles en la fecha de project
+        Set<Id> filteredResourcesIds = new Set<Id>(); //guardar users Ids disponibles en la fecha de project
 
         for(Id userId : resourceAllocationsByUserId.keySet()){
-            if(resourceAllocationsByUserId.get(userID).size > 0){
+            if(resourceAllocationsByUserId.get(userID).size() > 0){
                 Boolean available = true;
                 for(Resource_Allocation__c resourceAllocatedDates : resourceAllocationsByUserId.get(userID)){
- 
+ //modificar validaciones de fecha
                     if( ( resourceAllocatedDates.StartDate__c < ProjectStartDate && ( resourceAllocatedDates.EndDate__c < ProjectEndDate || resourceAllocatedDates.EndDate__c < ProjectStartDate ) ) || resourceAllocatedDates.StartDate__c > ProjectEndDate ){
                         continue;
                     }else{
