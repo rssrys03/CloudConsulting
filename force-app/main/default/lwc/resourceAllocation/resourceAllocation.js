@@ -1,14 +1,17 @@
-import { api, LightningElement, } from 'lwc';
-import {filterUserByRole} from '@salesforce/apex/AllocationFilter.filterUserByRole';
-
+import { api, LightningElement, wire } from 'lwc';
+import getRequiredRoles from "@salesforce/apex/AllocationFilterController.getRequiredRoles";
 export default class ResourceAllocation extends LightningElement {
-    @api projectId;
-    @api requiredRoleNames; // array de role names
-    @api roleName;
+    @api recordId; //projectId
+    requiredRoleNames
+    projectDates;
 
-    connectedCallback() {
-       this.roleName = this.template.querySelector("lightning-tabset").activeTabValue;
+    @wire (getRequiredRoles, {projectID: "$recordId"})
+    rolesObject({error, data}){
+        if(data){
+            this.requiredRoleNames = data.map(role => {
+                return role.Role__c;
+            })
+            this.projectDates = `Project starts from ${data[0].Project__r.Start_Date__c} until ${data[0].Project__r.End_Date__c}`;
+        }
     }
-
-
 }
