@@ -9,7 +9,7 @@
     <lightning-tabset variant="scoped">
       <template for:each={requiredRoleNames} for:item="roleName">
         <lightning-tab key={roleName} label={roleName} value={roleName}>
-          <c-users role={roleName} project={recordId}></c-users>
+          <c-users role={roleName} project={recordId} total-coverage={totalVSCoveredHours}></c-users>
         </lightning-tab>
       </template>
     </lightning-tabset>
