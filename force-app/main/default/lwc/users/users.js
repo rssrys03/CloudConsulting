@@ -1,12 +1,23 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable @lwc/lwc/no-api-reassignments */
 import { api, LightningElement, wire } from "lwc";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import { refreshApex } from "@salesforce/apex";
 import checkAllocatedResources from "@salesforce/apex/AllocationFilterController.checkAllocatedResources";
+import insertResourceAllocations from "@salesforce/apex/ResourceAllocationController.insertResourceAllocations";
+
+const SUCCESS_TITLE = "Success";
+const SUCCESS_MESSAGE = "Resource allocated in this Project!";
+const SUCCESS_VARIANT = "success";
+const ERROR_TITLE = "Error";
+const ERROR_VARIANT = "error";
 
 export default class Users extends LightningElement {
   @api role;
   @api project;
   @api totalCoverage;
+  @api requiredRoleObjId;
+
   data;
   columns = [
     { label: "First Name", fieldName: "FirstName" },
@@ -43,7 +54,7 @@ export default class Users extends LightningElement {
       }
     );
     this.totalCoverage = this.totalCoverage[0];
-    console.log("COVERAGE2", this.totalCoverage);
+    console.log("REQUIRED ID", this.requiredRoleObjId);
   }
 
   @wire(checkAllocatedResources, { projectID: "$project", roleName: "$role" })
@@ -57,6 +68,38 @@ export default class Users extends LightningElement {
   }
 
   handleSave(event) {
-    console.log(JSON.parse(JSON.stringify(event.detail.draftValues)));
+    let listObject = JSON.parse(JSON.stringify(event.detail.draftValues));
+
+    console.log("OBJECTLIST", listObject);
+    insertResourceAllocations({
+      allocationData: listObject,
+      requiredRoleId: this.requiredRoleObjId
+    })
+      .then(() => {
+        const success = new ShowToastEvent({
+          title: SUCCESS_TITLE,
+          message: SUCCESS_MESSAGE,
+          variant: SUCCESS_VARIANT
+        });
+        this.dispatchEvent(success);
+      })
+      .catch((err) => {
+        console.log(err.body.message);
+        let errors = "";
+        if (err.body.message) {
+          errors = err.body.message + "null";
+        } else {
+          err.body.pageErrors.forEach((error) => {
+            errors += error.message + ". ";
+          });
+        }
+
+        const error = new ShowToastEvent({
+          title: ERROR_TITLE,
+          message: errors,
+          variant: ERROR_VARIANT
+        });
+        this.dispatchEvent(error);
+      });
   }
 }

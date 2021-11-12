@@ -11,13 +11,13 @@ export default class ResourceAllocation extends LightningElement {
   rolesObject({ error, data }) {
     if (data) {
       this.requiredRoleNames = data.map((role) => {
-        console.log("QUANTITY", typeof role.Quantity__c);
+
         this.totalVSCoveredHours.push({
           role: role.Role__c,
           requiredHours: role.Quantity__c,
           totalCovered: role.TotalCoverage__c
         });
-        return role.Role__c;
+        return {nameRole : role.Role__c, requiredRoleObjId: role.Id};
       });
       this.projectDates = `Project starts from ${data[0].Project__r.Start_Date__c} until ${data[0].Project__r.End_Date__c}`;
       console.log(this.totalVSCoveredHours);

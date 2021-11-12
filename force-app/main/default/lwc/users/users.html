@@ -1,10 +1,4 @@
 <template>
-  <!-- barra de progreso -->
-  <div class="slds-progress-bar slds-progress-bar_circular"  role="progressbar" title="Current Progress">
-  <lightning-progress-bar value={totalCoverage.totalCovered} size="medium" variant="circular"></lightning-progress-bar>
- 
-</div>
-  <hr>
   <div class="slds-scrollable_y">
     <lightning-datatable
       key-field="Id"
@@ -14,5 +8,18 @@
       hide-checkbox-column
     >
     </lightning-datatable>
+  </div>
+  <!-- barra de progreso -->
+  <hr>
+  <div
+    class="slds-progress-bar slds-progress-bar_circular"
+    role="progressbar"
+    title="Current Progress"
+  >
+    <lightning-progress-bar
+      value={totalCoverage.totalCovered}
+      size="medium"
+      variant="circular"
+    ></lightning-progress-bar>
   </div>
 </template>

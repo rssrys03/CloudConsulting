@@ -3,15 +3,21 @@
     title="Allocate Resources"
     icon-name="standard:customer_lifecycle_analytics"
   >
-  <lightning-formatted-rich-text
-        value={projectDates}
-    ></lightning-formatted-rich-text>
     <lightning-tabset variant="scoped">
       <template for:each={requiredRoleNames} for:item="roleName">
-        <lightning-tab key={roleName} label={roleName} value={roleName}>
-          <c-users role={roleName} project={recordId} total-coverage={totalVSCoveredHours}></c-users>
+        <lightning-tab key={roleName.nameRole} label={roleName.nameRole}>
+          <c-users
+            role={roleName.nameRole}
+            project={recordId}
+            total-coverage={totalVSCoveredHours}
+            required-role-obj-id={roleName.requiredRoleObjId}
+          ></c-users>
         </lightning-tab>
       </template>
     </lightning-tabset>
+    <lightning-formatted-rich-text
+      value={projectDates}
+      class="slds-align_absolute-center slds-text-heading_small" style="font-weight: bold;"
+    ></lightning-formatted-rich-text>
   </lightning-card>
 </template>
