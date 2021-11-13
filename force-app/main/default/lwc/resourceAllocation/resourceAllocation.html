@@ -5,12 +5,13 @@
   >
     <lightning-tabset variant="scoped">
       <template for:each={requiredRoleNames} for:item="roleName">
-        <lightning-tab key={roleName.nameRole} label={roleName.nameRole}>
+        <lightning-tab key={roleName.nameRole} label={roleName.nameRole} value={roleName.nameRole}>
           <c-users
             role={roleName.nameRole}
             project={recordId}
             total-coverage={totalVSCoveredHours}
             required-role-obj-id={roleName.requiredRoleObjId}
+            onrefresh={refresh}
           ></c-users>
         </lightning-tab>
       </template>

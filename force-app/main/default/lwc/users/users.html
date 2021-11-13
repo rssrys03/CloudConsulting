@@ -1,4 +1,5 @@
 <template>
+  <template if:true={data}> 
   <div class="slds-scrollable_y">
     <lightning-datatable
       key-field="Id"
@@ -9,6 +10,10 @@
     >
     </lightning-datatable>
   </div>
+  </template>
+  <template if:false={data}>
+    <p>No data available</p>
+  </template>
   <!-- barra de progreso -->
   <hr>
   <div
@@ -17,7 +22,7 @@
     title="Current Progress"
   >
     <lightning-progress-bar
-      value={totalCoverage.totalCovered}
+      value={totalCovered.totalCovered}
       size="medium"
       variant="circular"
     ></lightning-progress-bar>

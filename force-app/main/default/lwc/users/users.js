@@ -17,8 +17,11 @@ export default class Users extends LightningElement {
   @api project;
   @api totalCoverage;
   @api requiredRoleObjId;
+  @api totalCovered;
 
   data;
+  @api wiredResult;
+
   columns = [
     { label: "First Name", fieldName: "FirstName" },
     { label: "Last Name", fieldName: "LastName" },
@@ -47,23 +50,29 @@ export default class Users extends LightningElement {
   ];
 
   connectedCallback() {
-    this.totalCoverage = JSON.parse(JSON.stringify(this.totalCoverage)).filter(
+    this.loadData();
+  }
+
+  @api loadData() {
+    console.log(JSON.parse(JSON.stringify(this.totalCoverage)));
+
+    this.totalCovered = JSON.parse(JSON.stringify(this.totalCoverage)).filter(
       // eslint-disable-next-line consistent-return
       (coverage) => {
         if (coverage.role === this.role) return coverage;
       }
-    );
-    this.totalCoverage = this.totalCoverage[0];
-    console.log("REQUIRED ID", this.requiredRoleObjId);
+    )[0];
+
+    console.log("TOTAL COVERED",this.totalCovered);
   }
 
   @wire(checkAllocatedResources, { projectID: "$project", roleName: "$role" })
   // eslint-disable-next-line no-unused-vars
-  availableUsers({ error, data }) {
-    console.log(data);
-    if (data) {
-      console.log(data);
-      this.data = data;
+  availableUsers(result) {
+    this.wiredResult = result;
+    if (result.data && result.data.length > 0) {
+      console.log(result.data);
+      this.data = result.data;
     }
   }
 
@@ -82,12 +91,15 @@ export default class Users extends LightningElement {
           variant: SUCCESS_VARIANT
         });
         this.dispatchEvent(success);
+        this.template.querySelector("lightning-datatable").draftValues = [];
+        this.dispatchEvent(new CustomEvent("refresh"));
+        return refreshApex(this.wiredResult);
       })
       .catch((err) => {
         console.log(err.body.message);
         let errors = "";
         if (err.body.message) {
-          errors = err.body.message + "null";
+          errors = err.body.message;
         } else {
           err.body.pageErrors.forEach((error) => {
             errors += error.message + ". ";
