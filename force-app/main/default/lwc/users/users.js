@@ -17,10 +17,11 @@ export default class Users extends LightningElement {
   @api project;
   @api totalCoverage;
   @api requiredRoleObjId;
-  @api totalCovered;
 
+  requiredHours
+  totalCovered;
   data;
-  @api wiredResult;
+  wiredResult;
 
   columns = [
     { label: "First Name", fieldName: "FirstName" },
@@ -62,7 +63,8 @@ export default class Users extends LightningElement {
         if (coverage.role === this.role) return coverage;
       }
     )[0];
-
+    
+    this.requiredHours = (this.totalCovered.requiredHours - this.totalCovered.totalCovered) >= 0 ? this.totalCovered.requiredHours - this.totalCovered.totalCovered : 0;
     console.log("TOTAL COVERED",this.totalCovered);
   }
 
@@ -79,7 +81,6 @@ export default class Users extends LightningElement {
   handleSave(event) {
     let listObject = JSON.parse(JSON.stringify(event.detail.draftValues));
 
-    console.log("OBJECTLIST", listObject);
     insertResourceAllocations({
       allocationData: listObject,
       requiredRoleId: this.requiredRoleObjId
@@ -90,9 +91,11 @@ export default class Users extends LightningElement {
           message: SUCCESS_MESSAGE,
           variant: SUCCESS_VARIANT
         });
+
         this.dispatchEvent(success);
         this.template.querySelector("lightning-datatable").draftValues = [];
         this.dispatchEvent(new CustomEvent("refresh"));
+
         return refreshApex(this.wiredResult);
       })
       .catch((err) => {
@@ -111,6 +114,7 @@ export default class Users extends LightningElement {
           message: errors,
           variant: ERROR_VARIANT
         });
+
         this.dispatchEvent(error);
       });
   }

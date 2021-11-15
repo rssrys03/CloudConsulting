@@ -1,5 +1,5 @@
 public with sharing class AllocationFilterController {
-    //trae los requiredRoles y todos los roles requeridos
+    //devuelve una lista con RequiredRole Objects para acceder a los roles requeridos y fechas de proyecto
     @AuraEnabled(cacheable=true)
     public static List<Required_Role__c> getRequiredRoles(Id projectID) {
         List<Required_Role__c> requiredRoles = [
@@ -10,7 +10,7 @@ public with sharing class AllocationFilterController {
             return requiredRoles;
     }
 
-    // a partir de un rol dado trae los usuarios con ese rol
+    // a partir de un rol dado trae una lista de usuarios con ese rol
     public static List<User> findUsersWithRequiredRoles(String roleName) {
 
         List<User> resourcesMeetingRequirements = [SELECT FirstName, LastName, UserRole.Name 

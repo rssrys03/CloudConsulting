@@ -1,21 +1,28 @@
 <template>
-  <template if:true={data}> 
-  <div class="slds-scrollable_y">
-    <lightning-datatable
-      key-field="Id"
-      data={data}
-      onsave={handleSave}
-      columns={columns}
-      hide-checkbox-column
-    >
-    </lightning-datatable>
-  </div>
+  <template if:true={data}>
+    <div class="slds-scrollable_y">
+      <lightning-datatable
+        key-field="Id"
+        data={data}
+        onsave={handleSave}
+        columns={columns}
+        hide-checkbox-column
+      >
+      </lightning-datatable>
+    </div>
   </template>
   <template if:false={data}>
     <p>No data available</p>
   </template>
   <!-- barra de progreso -->
-  <hr>
+  <br />
+  <h2
+    class="slds-align_absolute-center slds-text-heading_small"
+    style="font-weight: bold"
+  >
+    Total hours needed: {totalCovered.requiredHours}.
+  </h2>
+  <br />
   <div
     class="slds-progress-bar slds-progress-bar_circular"
     role="progressbar"
@@ -27,4 +34,12 @@
       variant="circular"
     ></lightning-progress-bar>
   </div>
+  <br />
+  <h2
+    class="slds-align_absolute-center slds-text-heading_small"
+    style="font-weight: bold"
+  >
+    Hours left to cover: {requiredHours}
+  </h2>
+  <br />
 </template>

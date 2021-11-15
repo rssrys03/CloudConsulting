@@ -7,7 +7,7 @@ export default class ResourceAllocation extends LightningElement {
   @api totalVSCoveredHours;
   @api requiredRoleNames;
   projectDates;
-  @api wiredResult;
+  wiredResult;
 
   @wire(getRequiredRoles, { projectID: "$recordId" })
   // eslint-disable-next-line no-unused-vars
