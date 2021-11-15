@@ -1,0 +1,9 @@
+<template>
+    <lightning-card title="Allocate Resources" icon-name="custom:customer_lifecycle_analytics">
+        <lightning-tabset variant="scoped">
+            <template if:true={requiredRoleNames} for:each={requiredRoleNames} for:item="name">
+                <c-resource-allocation key={name} role-name={name}></c-resource-allocation>
+            </template>
+        </lightning-tabset>
+    </lightning-card>
+</template>

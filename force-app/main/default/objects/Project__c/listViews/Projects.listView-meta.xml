@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Projects</fullName>
+    <columns>NAME</columns>
+    <columns>Start_Date__c</columns>
+    <columns>End_Date__c</columns>
+    <columns>Squad_Lead__c</columns>
+    <columns>Total_Hours_Sold__c</columns>
+    <columns>Total_Covered_Hours__c</columns>
+    <filterScope>Mine</filterScope>
+    <label>Projects</label>
+</ListView>
