@@ -1,13 +1,36 @@
 import { api, LightningElement, wire } from "lwc";
 import getRequiredRoles from "@salesforce/apex/AllocationFilterController.getRequiredRoles";
+import getResourcesInProject from "@salesforce/apex/AllocationFilterController.getResourcesInProject";
 import { refreshApex } from "@salesforce/apex";
 
 export default class ResourceAllocation extends LightningElement {
   @api recordId; //projectId
   @api totalVSCoveredHours;
   @api requiredRoleNames;
+  changeSquadLead = true;
+  actualSquadLead;
+  squadOptions;
   projectDates;
   wiredResult;
+
+
+  connectedCallback(){
+    this.loadData();
+  }
+
+  loadData() {
+    getResourcesInProject({ projectId: this.recordId }).then(
+      (squadLeadOptions) => {
+        this.squadOptions = squadLeadOptions.map((object) => {
+          return {
+            label: `${object.Resources__r.FirstName} ${object.Resources__r.LastName}`,
+            value: object.Resources__r.Id
+          };
+        });
+        console.log('SQUADDD',this.squadOptions);
+      }
+    );
+  }
 
   @wire(getRequiredRoles, { projectID: "$recordId" })
   // eslint-disable-next-line no-unused-vars
@@ -28,6 +51,8 @@ export default class ResourceAllocation extends LightningElement {
   }
   @api async refresh() {
     await refreshApex(this.wiredResult);
-    this.template.querySelectorAll("c-users").forEach(tabset => tabset.loadData());
+    this.template
+      .querySelectorAll("c-users")
+      .forEach((tabset) => tabset.loadData());
   }
 }

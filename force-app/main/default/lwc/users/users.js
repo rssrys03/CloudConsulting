@@ -17,7 +17,7 @@ export default class Users extends LightningElement {
   @api project;
   @api totalCoverage;
   @api requiredRoleObjId;
-
+  
   requiredHours
   totalCovered;
   data;

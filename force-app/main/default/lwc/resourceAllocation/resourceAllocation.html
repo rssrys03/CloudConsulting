@@ -6,9 +6,15 @@
     <lightning-formatted-rich-text
       value={projectDates}
       class="slds-align_absolute-center slds-text-heading_small"
-      style="font-weight: bold"
+      style="
+        font-weight: bold;
+        background-color: antiquewhite;
+        border-top: 2px solid rgba(0, 0, 0, 0.4);
+        border-radius: 15px 50px 30px;
+        max-width: 50%;
+      "
     ></lightning-formatted-rich-text>
-    <br/>
+    <br />
     <lightning-tabset variant="scoped">
       <template for:each={requiredRoleNames} for:item="roleName">
         <lightning-tab
@@ -26,5 +32,30 @@
         </lightning-tab>
       </template>
     </lightning-tabset>
+    <template if:true={changeSquadLead}>
+      <div style="max-width: 50%">
+        <lightning-combobox
+          name="squadLead"
+          label="Choose your Squad Lead"
+          placeholder="Choose your Squad Lead"
+          options={squadOptions}
+          onchange={handleChange}
+        >
+        </lightning-combobox>
+        <div class="slds-clearfix">
+          <div class="slds-float_right">
+            <lightning-button label="Assign" onclick={assign} variant="brand">
+            </lightning-button>
+          </div>
+        </div>
+      </div>
+    </template>
+    <template if:false={changeSquadLead}>
+      <lightning-formatted-rich-text
+        value={projectDates}
+        class="slds-text-heading_small"
+        style="font-weight: bold"
+      ></lightning-formatted-rich-text>
+    </template>
   </lightning-card>
 </template>

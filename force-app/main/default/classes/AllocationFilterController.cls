@@ -24,19 +24,13 @@ public with sharing class AllocationFilterController {
     @AuraEnabled(cacheable=true)
     public static List<User> checkAllocatedResources(Id projectID, String roleName){
         List<Required_Role__c> requiredRoleWithProjectDates = getRequiredRoles(projectID);
-        List<User> resources = findUsersWithRequiredRoles(roleName);
-
-        List<Id> resourcesIdsToFilter = new List<Id>(); //(id1, id2)
-        
-        for(User resource : resources){
-            resourcesIdsToFilter.add(resource.Id);
-        }
+        Map<Id, User> resourcesById = new Map<Id, User>(findUsersWithRequiredRoles(roleName));
         
         Date ProjectStartDate = requiredRoleWithProjectDates[0].Project__r.Start_Date__c;
         Date ProjectEndDate = requiredRoleWithProjectDates[0].Project__r.End_Date__c;
 
-        //tenemos los no disponibles = con intersecciones
-        List<Resource_Allocation__c> resourcesAllocated = [SELECT StartDate__c, EndDate__c, Resources__c FROM Resource_Allocation__c WHERE Resources__c IN: resourcesIdsToFilter AND Required_Role__r.Project__r.Status__c != 'Completed' AND EndDate__c >:  ProjectStartDate AND StartDate__c <: ProjectEndDate];
+        //buscar records en resource allocation que tenga recursos no disponibles = con intersecciones para el proyecto actual
+        List<Resource_Allocation__c> resourcesAllocated = [SELECT StartDate__c, EndDate__c, Resources__c FROM Resource_Allocation__c WHERE Resources__c IN: resourcesById.keySet() AND Required_Role__r.Project__r.Status__c != 'Completed' AND EndDate__c >:  ProjectStartDate AND StartDate__c <: ProjectEndDate];
 
         Map<Id, List<Resource_Allocation__c>> resourceAllocationsByUserId = new Map<Id, List<Resource_Allocation__c>>();
         
@@ -44,28 +38,34 @@ public with sharing class AllocationFilterController {
         for(Id userId : resourcesIdsToFilter){
             resourceAllocationsByUserId.put(userId, new List<Resource_Allocation__c>());
         }
-
+        //damos a los ids del map sus records de resourceAllocation si corresponde
         for(Resource_Allocation__c resourceAllocated : resourcesAllocated){
             if(resourceAllocationsByUserId.containsKey(resourceAllocated.Resources__c)){
                 resourceAllocationsByUserId.get(resourceAllocated.Resources__c).add(resourceAllocated);
             }
         }
         
-        Set<Id> filteredResourcesIds = new Set<Id>(); //guardar users Ids disponibles en la fecha de project
+       // Set<Id> filteredResourcesIds = new Set<Id>(); //guardar users Ids disponibles en la fecha de project
 
+        List<User> usersAvailables = new List<User>();
         for(Id userId : resourceAllocationsByUserId.keySet()){
             if(resourceAllocationsByUserId.get(userID).size() == 0){
-                filteredResourcesIds.add(userId);                
+                usersAvailables.add(resourcesById.get(userID));                
             }
         }
 
-        //query para buscar los usurios y devolverlos en una lista de user
-        List<User> usersAvailables = [SELECT FirstName, LastName, UserRole.Name 
-        FROM User 
-        WHERE Id
-        IN: filteredResourcesIds];
-
         return usersAvailables;
+    }
+    
+    //devuelve los recursos alocados en el proyecto dado
+    @AuraEnabled(cacheable=true)
+    public static List<Resource_Allocation__c> getResourcesInProject(Id projectId){
+        List<Resource_Allocation__c> squadLeadOptions = [
+            SELECT Resources__r.Id, Resources__r.FirstName, Resources__r.LastName
+            FROM Resource_Allocation__c 
+            WHERE Required_Role__r.Project__c =: projectId];
+
+        return squadLeadOptions;
     }
     
 }

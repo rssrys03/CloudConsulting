@@ -6,7 +6,6 @@
         data={data}
         onsave={handleSave}
         columns={columns}
-        hide-checkbox-column
       >
       </lightning-datatable>
     </div>
@@ -16,9 +15,10 @@
   </template>
   <!-- barra de progreso -->
   <br />
+  <br />
   <h2
-    class="slds-align_absolute-center slds-text-heading_small"
-    style="font-weight: bold"
+    class="slds-text-heading_small"
+    style="font-weight: bold;"
   >
     Total hours needed: {totalCovered.requiredHours}.
   </h2>
@@ -36,10 +36,10 @@
   </div>
   <br />
   <h2
-    class="slds-align_absolute-center slds-text-heading_small"
-    style="font-weight: bold"
+    class="slds-text-heading_small"
+    style="font-weight: bold;"
   >
-    Hours left to cover: {requiredHours}
+    Hours left to cover: {requiredHours}.
   </h2>
   <br />
 </template>
