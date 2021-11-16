@@ -1,48 +1,71 @@
 public with sharing class ResourceAllocationHelper {
-    public static void onbeforeInsert(List<Resource_Allocation__c> newResourcesData) { //id:resouuceAllData
-        Map<Id, List<Resource_Allocation__c>> resourceAllocationByRequiredRoleId = new Map<Id, List<Resource_Allocation__c>>();
+    public static void onbeforeInsert(List<Resource_Allocation__c> newResourcesData) {
+        Map<Id, List<Required_Role__c>> resourceAllocationByRequiredRoleId = new Map<Id, List<Required_Role__c>>();
         
         for(Resource_Allocation__c resourceData : newResourcesData){
-            resourceAllocationByRequiredRoleId.put(resourceData.Required_Role__c, new List<Resource_Allocation__c>());
+            resourceAllocationByRequiredRoleId.put(resourceData.Required_Role__c, new List<Required_Role__c>());
         }
         
-        List<Resource_Allocation__c> projectsData = [
-            SELECT StartDate__c, EndDate__c, Required_Role__r.Project__r.Start_Date__c, Required_Role__r.Project__r.End_Date__c, Required_Role__r.Project__c
-            FROM Resource_Allocation__c 
-            WHERE Required_Role__c 
+        List<Required_Role__c> projectsData = [
+            SELECT Project__r.Start_Date__c, Project__r.End_Date__c
+            FROM Required_Role__c 
+            WHERE Id 
             IN: resourceAllocationByRequiredRoleId.keySet()];
         
 
-        for(Resource_Allocation__c projectdata: projectsData){
-            if(resourceAllocationByRequiredRoleId.containsKey(projectdata.Required_Role__c)){
-                resourceAllocationByRequiredRoleId.get(projectdata.Required_Role__c).add(projectdata);
+        for(Required_Role__c projectdata: projectsData){
+            if(resourceAllocationByRequiredRoleId.containsKey(projectdata.Id)){
+                resourceAllocationByRequiredRoleId.get(projectdata.Id).add(projectdata);
             }
         }
-
-        // Map<Id, List<Required_Role__c>> resourceProjectDatesByRequiredRoleId = new Map<Id, List<Date>>();
-        
-        // for(Resource_Allocation__c resourceData : newResourcesData){
-        //     resourceProjectDatesByRequiredRoleId.put(resourceData.Required_Role__c, new List<Date>());
-        // }
-
-
-        // //validar que las fechas asignadas no sean no se salgan del rango de  fechas del proyecto
-        // List<Required_Role__c> projectData = [SELECT Project__r.Start_Date__c, Project__r.End_Date__c FROM Required_Role__c WHERE Id  IN : resourceProjectDatesByRequiredRoleId.keySet()];
 
 
         for(Resource_Allocation__c resource : newResourcesData){
-            if(resourceAllocationByRequiredRoleId.get(resource.Required_Role__c).size() > 0){
-                for(Resource_Allocation__c resourceData : resourceAllocationByRequiredRoleId.get(resource.Required_Role__c)){
-                    Date startProjectDate = resourceData.Required_Role__r.Project__r.Start_Date__c;
-                    Date endProjectDate = resourceData.Required_Role__r.Project__r.End_Date__c;
-                    if(resourceData.StartDate__c < startProjectDate || resourceData.StartDate__c > endProjectDate || resourceData.EndDate__c < startProjectDate || resourceData.EndDate__c > endProjectDate){
+                for(Required_Role__c resourceData : resourceAllocationByRequiredRoleId.get(resource.Required_Role__c)){
+                    Date startProjectDate = resourceData.Project__r.Start_Date__c;
+                    Date endProjectDate = resourceData.Project__r.End_Date__c;
+            
+                    if(resource.StartDate__c < startProjectDate || resource.StartDate__c > endProjectDate || resource.EndDate__c < startProjectDate || resource.EndDate__c > endProjectDate){
                         resource.addError('Either the Start Date or End Date you defined for a Resource is out of the project date range');
-                    }   
-                }
+                        break;
+                    }
             }
         }
 
-        //evitar insersion manual de recursos en tabla resource allocation validando que el recurso no este alocado en ningun otro proyecto y haga intersección en el actual
+        //evitar inserción manual de recursos en tabla resource allocation validando que el recurso no este alocado en ningun otro proyecto y haga intersección en el actual
+
+        Map<Id, List<Resource_Allocation__c>> resourceAllocationsByUserId = new Map<Id, List<Resource_Allocation__c>>();
+        for(Resource_Allocation__c allocation : newResourcesData){
+            resourceAllocationsByUserId.put(allocation.Resources__c, new List<Resource_Allocation__c>());
+        }
+
+        List<Resource_Allocation__c> allocationsToCheck = [
+            SELECT StartDate__c, EndDate__c, Resources__c, Required_Role__r.Project__r.Start_Date__c, Required_Role__r.Project__r.End_Date__c 
+            FROM Resource_Allocation__c 
+            WHERE Resources__c IN: resourceAllocationsByUserId.keySet() 
+            AND Required_Role__r.Project__r.Status__c != 'Completed'];
+
+        for(Resource_Allocation__c allocation : allocationsToCheck){
+            if(resourceAllocationsByUserId.containsKey(allocation.Resources__c)){
+                resourceAllocationsByUserId.get(allocation.Resources__c).add(allocation);              
+            }
+        }
+
+        for(Resource_Allocation__c newInsert : newResourcesData){
+            if(resourceAllocationsByUserId.get(newInsert.Resources__c).size() > 0){
+                for(Resource_Allocation__c existentAllocation : resourceAllocationsByUserId.get(newInsert.Resources__c)){
+
+                    if( (existentAllocation.StartDate__c >= newInsert.StartDate__c && existentAllocation.StartDate__c <= newInsert.EndDate__c) || ( existentAllocation.EndDate__c >= newInsert.StartDate__c && existentAllocation.EndDate__c <= newInsert.StartDate__c)){
+                        newInsert.addError('You are trying to allocate a resource that is already busy in other project. Please check your options');
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+}
+                
         // Set<Id> usersIds = new Set<Id>();
         // for(Resource_Allocation__c allocation : newResourcesData){
         //     usersIds.add(allocation.Resources__c);
@@ -57,6 +80,3 @@ public with sharing class ResourceAllocationHelper {
         //         }
         //     }
         // }
-
-    }
-}

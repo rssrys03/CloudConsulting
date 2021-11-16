@@ -13,8 +13,7 @@ export default class ResourceAllocation extends LightningElement {
   projectDates;
   wiredResult;
 
-
-  connectedCallback(){
+  connectedCallback() {
     this.loadData();
   }
 
@@ -27,7 +26,7 @@ export default class ResourceAllocation extends LightningElement {
             value: object.Resources__r.Id
           };
         });
-        console.log('SQUADDD',this.squadOptions);
+        console.log("SQUADDD", this.squadOptions);
       }
     );
   }
