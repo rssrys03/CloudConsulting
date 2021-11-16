@@ -1,4 +1,4 @@
-public with sharing class AllocationFilterController {
+public class AllocationFilterController {
     //devuelve una lista con RequiredRole Objects para acceder a los roles requeridos y fechas de proyecto
     @AuraEnabled(cacheable=true)
     public static List<Required_Role__c> getRequiredRoles(Id projectID) {
@@ -35,7 +35,7 @@ public with sharing class AllocationFilterController {
         Map<Id, List<Resource_Allocation__c>> resourceAllocationsByUserId = new Map<Id, List<Resource_Allocation__c>>();
         
         //armado de mapa con userId : lista de allocation vacia.
-        for(Id userId : resourcesIdsToFilter){
+        for(Id userId : resourcesById.keySet()){
             resourceAllocationsByUserId.put(userId, new List<Resource_Allocation__c>());
         }
         //damos a los ids del map sus records de resourceAllocation si corresponde
@@ -58,14 +58,14 @@ public with sharing class AllocationFilterController {
     }
     
     //devuelve los recursos alocados en el proyecto dado
-    @AuraEnabled(cacheable=true)
-    public static List<Resource_Allocation__c> getResourcesInProject(Id projectId){
-        List<Resource_Allocation__c> squadLeadOptions = [
-            SELECT Resources__r.Id, Resources__r.FirstName, Resources__r.LastName
-            FROM Resource_Allocation__c 
-            WHERE Required_Role__r.Project__c =: projectId];
+    // @AuraEnabled(cacheable=true)
+    // public static List<Resource_Allocation__c> getResourcesInProject(Id projectId){
+    //     List<Resource_Allocation__c> squadLeadOptions = [
+    //         SELECT Resources__r.Id, Resources__r.FirstName, Resources__r.LastName
+    //         FROM Resource_Allocation__c 
+    //         WHERE Required_Role__r.Project__c =: projectId];
 
-        return squadLeadOptions;
-    }
+    //     return squadLeadOptions;
+    // }
     
 }

@@ -18,15 +18,15 @@ public with sharing class AllocationFilterControllerTest {
         List<User> arch = AllocationFilterController.findUsersWithRequiredRoles('Architect');
         List<User> consul = AllocationFilterController.findUsersWithRequiredRoles('Consultant');
 
-        System.assertEquals( 4,
+        System.assertEquals( 10,
         devs.size(),
         'There must be at least 2 users with Developer role'
         );
-        System.assertEquals( 4,
+        System.assertEquals( 10,
         arch.size(),
         'There must be at least 1 users with Architect role'
         );
-        System.assertEquals( 4,
+        System.assertEquals( 10,
         consul.size(),
         'There must be at least 2 users with Consultant role'
         );
@@ -46,15 +46,15 @@ public with sharing class AllocationFilterControllerTest {
             AND LastName='Miller' 
             LIMIT 1];
         
-        System.assertEquals( 4,
+        System.assertEquals( 10,
         devs.size(),
         'There must be at least 4 users with Developer role'
         );
-        System.assertEquals( 4,
+        System.assertEquals( 10,
         arch.size(),
         'There must be at least 4 users with Architect role'
         );
-        System.assertEquals( 3,
+        System.assertEquals( 9,
         consul.size(),
         'There must be at least 3 users with Consultant role'
         );

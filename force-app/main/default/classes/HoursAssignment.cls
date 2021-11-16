@@ -1,4 +1,4 @@
-public with sharing class HoursAssignment {
+public class HoursAssignment {
     public static Integer calculateHours(Date startDate, Date endDate) {
         Integer totalDays = (startDate-1).daysBetween(endDate);
         

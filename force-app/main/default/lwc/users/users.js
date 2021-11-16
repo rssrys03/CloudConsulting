@@ -18,7 +18,9 @@ export default class Users extends LightningElement {
   @api totalCoverage;
   @api requiredRoleObjId;
   
-  requiredHours
+  isLoading = true;
+  selectedUsersIds = [];
+  requiredHours;
   totalCovered;
   data;
   wiredResult;
@@ -63,9 +65,12 @@ export default class Users extends LightningElement {
         if (coverage.role === this.role) return coverage;
       }
     )[0];
-    
-    this.requiredHours = (this.totalCovered.requiredHours - this.totalCovered.totalCovered) >= 0 ? this.totalCovered.requiredHours - this.totalCovered.totalCovered : 0;
-    console.log("TOTAL COVERED",this.totalCovered);
+
+    this.requiredHours =
+      this.totalCovered.requiredHours - this.totalCovered.totalCovered >= 0
+        ? this.totalCovered.requiredHours - this.totalCovered.totalCovered
+        : 0;
+    console.log("TOTAL COVERED", this.totalCovered);
   }
 
   @wire(checkAllocatedResources, { projectID: "$project", roleName: "$role" })
@@ -75,11 +80,34 @@ export default class Users extends LightningElement {
     if (result.data && result.data.length > 0) {
       console.log(result.data);
       this.data = result.data;
+      this.isLoading = false;
+    } else {
+      this.data = [];
     }
   }
 
+  handleSelect(e) {
+    let selectedUsers = JSON.parse(JSON.stringify(e.detail.selectedRows));
+    this.selectedUsersIds = selectedUsers.map((userData) => userData.Id);
+    console.log(this.selectedUsersIds);
+  }
+
   handleSave(event) {
-    let listObject = JSON.parse(JSON.stringify(event.detail.draftValues));
+    console.log(JSON.parse(JSON.stringify(event.detail.draftValues)));
+    let listObject = JSON.parse(
+      JSON.stringify(event.detail.draftValues)
+    ).filter((userData) => this.selectedUsersIds.includes(userData.Id));
+
+    if(!listObject.length > 0){
+      const error = new ShowToastEvent({
+        title: ERROR_TITLE,
+        message: 'You need to check the box in the row you wanna insert',
+        variant: ERROR_VARIANT
+      });
+
+      this.dispatchEvent(error);
+      return;
+    }
 
     insertResourceAllocations({
       allocationData: listObject,
@@ -95,7 +123,7 @@ export default class Users extends LightningElement {
         this.dispatchEvent(success);
         this.template.querySelector("lightning-datatable").draftValues = [];
         this.dispatchEvent(new CustomEvent("refresh"));
-
+        this.isLoading = true;
         return refreshApex(this.wiredResult);
       })
       .catch((err) => {

@@ -1,4 +1,4 @@
-public with sharing class ResourceAllocationController {
+public class ResourceAllocationController {
     @AuraEnabled
     public static void insertResourceAllocations(List<Object> allocationData, Id requiredRoleId) {
 
