@@ -2,33 +2,65 @@
 private  class ResourceAllocationControllerTest {
     @isTest
     static void insertResourceAllocationsTest() {
-       User Lancelotdeveloper = [
+       User developer = [
             SELECT Id 
             FROM User 
-            WHERE LastName='Lancelot' 
+            WHERE LastName='Testing' 
+            AND FirstName='Test Dev'
             LIMIT 1];
+
+        Required_Role__c  reqRole= setUpData();
+        Map<Object, Object> newMap = new Map<Object, Object>();
+
+        newMap.put('StartDate', '2021-11-22');
+        newMap.put('EndDate', '2021-11-24');
+        newMap.put('Id', developer.Id);
+
+        List<Map<Object, Object>> listMap = new List<Map<Object, Object>>{newMap};
         
-        List<Object> alocacionTest= new List<Object>{
-            '{"StartDate":"2021/11/15", "EndDate":"2021/11/22","Id":"0055f000004jryfAAA"}'
-        };
-        Required_Role__c  reqRoles= setUpData();
+        ResourceAllocationController.insertResourceAllocations(listMap, reqRole.Id);
+        Resource_Allocation__c resource = [SELECT Total_Hours__c  FROM Resource_Allocation__c WHERE Required_Role__c =: reqRole.Id];
+        System.assertEquals(24, resource.Total_Hours__c);
     }
 
     //helper
+    @TestSetup
+    static void makeUserData(){
+        Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
+        UserRole devId = [SELECT Id FROM UserRole WHERE Name='Developer' LIMIT 1];
+        User dev = new User(
+            Alias = 'standt', 
+            Email='standarduser@testorg.com', 
+            EmailEncodingKey='UTF-8', 
+            FirstName='Test Dev',
+            LastName='Testing', 
+            LanguageLocaleKey='en_US', 
+            LocaleSidKey='en_US', 
+            ProfileId = p.Id, 
+            UserRoleId= devId.Id,
+            TimeZoneSidKey='America/Los_Angeles', 
+            UserName='testdevkaiken@testorg.com'
+            );
+
+        insert dev;
+    }
+
     private static Required_Role__c  setUpData(){
         Account acc = new Account(Name = 'TestAcc');
         insert acc;
         
-        Opportunity opp = new Opportunity(Name = 'testOpp', 
-                                          AccountId= acc.Id, 
-                                          Project_Manager__c = [
-                                              SELECT Id 
-                                              FROM User 
-                                              WHERE FirstName='Agustin' 
-                                              AND LastName='Perdomo'
-                                              LIMIT 1].Id,
-                                          StageName='Negotiation/Review',
-                                          CloseDate= Date.today().addDays(40));
+        Opportunity opp = new Opportunity(
+            Name = 'testOpp', 
+            AccountId= acc.Id, 
+            Project_Manager__c = [
+                SELECT Id 
+                FROM User 
+                WHERE FirstName='Agustin' 
+                AND LastName='Perdomo'
+                LIMIT 1].Id,
+            StageName='Negotiation/Review',
+            CloseDate= Date.today().addDays(40)
+        );
         insert opp;
         
     //project

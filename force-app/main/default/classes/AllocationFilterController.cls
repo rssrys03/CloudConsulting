@@ -45,8 +45,6 @@ public class AllocationFilterController {
             }
         }
         
-       // Set<Id> filteredResourcesIds = new Set<Id>(); //guardar users Ids disponibles en la fecha de project
-
         List<User> usersAvailables = new List<User>();
         for(Id userId : resourceAllocationsByUserId.keySet()){
             if(resourceAllocationsByUserId.get(userID).size() == 0){
@@ -57,15 +55,5 @@ public class AllocationFilterController {
         return usersAvailables;
     }
     
-    //devuelve los recursos alocados en el proyecto dado
-    // @AuraEnabled(cacheable=true)
-    // public static List<Resource_Allocation__c> getResourcesInProject(Id projectId){
-    //     List<Resource_Allocation__c> squadLeadOptions = [
-    //         SELECT Resources__r.Id, Resources__r.FirstName, Resources__r.LastName
-    //         FROM Resource_Allocation__c 
-    //         WHERE Required_Role__r.Project__c =: projectId];
-
-    //     return squadLeadOptions;
-    // }
     
 }

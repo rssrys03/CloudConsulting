@@ -13,79 +13,168 @@ public with sharing class AllocationFilterControllerTest {
 
     @isTest static void findUsersWithRequiredRolesTest() {
         Project__c project = setUpData();
+        User consulUser = [
+            SELECT FirstName, LastName, UserRole.Name
+            FROM User 
+            WHERE FirstName = 'Test Consul' 
+            AND LastName='Testing' 
+            LIMIT 1];
+        User devUser = [
+            SELECT FirstName, LastName, UserRole.Name
+            FROM User 
+            WHERE FirstName = 'Test Dev' 
+            AND LastName='Testing' 
+            LIMIT 1];
+        System.debug('USER' + devUser);
+        User archUser = [
+            SELECT FirstName, LastName, UserRole.Name
+            FROM User 
+            WHERE FirstName = 'Test Arch' 
+            AND LastName='Testing' 
+            LIMIT 1];
 
         List<User> devs = AllocationFilterController.findUsersWithRequiredRoles('Developer');
         List<User> arch = AllocationFilterController.findUsersWithRequiredRoles('Architect');
         List<User> consul = AllocationFilterController.findUsersWithRequiredRoles('Consultant');
 
-        System.assertEquals( 10,
-        devs.size(),
-        'There must be at least 2 users with Developer role'
+        System.assertEquals(true,
+        devs.contains(devUser),
+        'Devs list must have in their users the dev test user'
         );
-        System.assertEquals( 10,
-        arch.size(),
-        'There must be at least 1 users with Architect role'
+        System.assertEquals( true,
+        arch.contains(archUser),
+        'Arch list must have in their users the architect test user'
         );
-        System.assertEquals( 10,
-        consul.size(),
-        'There must be at least 2 users with Consultant role'
+        System.assertEquals( true,
+        consul.contains(consulUser),
+        'Consul list must have in their users the consul test user'
         );
 
     }
 
     @isTest static void checkAllocatedResourcesTest() {
-        Project__c project = setUpData();
+       Project__c project = setUpData();
 
         List<User> devs = AllocationFilterController.checkAllocatedResources(project.Id, 'Developer');
         List<User> arch = AllocationFilterController.checkAllocatedResources(project.Id, 'Architect');
         List<User> consul = AllocationFilterController.checkAllocatedResources(project.Id, 'Consultant');
-        User evaristoConsul = [
-            SELECT Id 
+        User consulUser = [
+            SELECT FirstName, LastName, UserRole.Name
             FROM User 
-            WHERE FirstName = 'Evaristo' 
-            AND LastName='Miller' 
+            WHERE FirstName = 'Test Consul' 
+            AND LastName='Testing' 
+            LIMIT 1];
+
+        User devUser = [
+            SELECT FirstName, LastName, UserRole.Name
+            FROM User 
+            WHERE FirstName = 'Test Dev' 
+            AND LastName='Testing' 
+            LIMIT 1];
+
+        User archUser = [
+            SELECT FirstName, LastName, UserRole.Name
+            FROM User 
+            WHERE FirstName = 'Test Arch' 
+            AND LastName='Testing' 
             LIMIT 1];
         
-        System.assertEquals( 10,
-        devs.size(),
-        'There must be at least 4 users with Developer role'
+         System.assertEquals(true,
+        devs.contains(devUser),
+        'Devs list must have in their users the dev test user'
         );
-        System.assertEquals( 10,
-        arch.size(),
-        'There must be at least 4 users with Architect role'
-        );
-        System.assertEquals( 9,
-        consul.size(),
-        'There must be at least 3 users with Consultant role'
+        System.assertEquals( true,
+        arch.contains(archUser),
+        'Arch list must have in their users the architect test user'
         );
         System.assertEquals( false,
-        consul.contains(evaristoConsul),
+        consul.contains(consulUser),
         'Evaristo Miller is allocated, he shouldn\'\t be in the available users'
         );
 
     }
 
     //helper
+     @testSetUp
+    private static void setUpUserData(){
+        Profile p = [SELECT Id FROM Profile WHERE Name='Standard User']; 
+        UserRole devId = [SELECT Id FROM UserRole WHERE Name='Developer' LIMIT 1];
+        UserRole archId = [SELECT Id FROM UserRole WHERE Name='Architect' LIMIT 1];
+        UserRole consulId = [SELECT Id FROM UserRole WHERE Name='Consultant' LIMIT 1];
+        
+        
+        List<User> users = new List<User>();
+        User dev = new User(
+            Alias = 'standt', 
+            Email='standarduser@testorg.com', 
+            EmailEncodingKey='UTF-8', 
+            FirstName='Test Dev',
+            LastName='Testing', 
+            LanguageLocaleKey='en_US', 
+            LocaleSidKey='en_US', 
+            ProfileId = p.Id, 
+            UserRoleId= devId.Id,
+            TimeZoneSidKey='America/Los_Angeles', 
+            UserName='testdevkaiken@testorg.com'
+        );
+        users.add(dev);
+
+        User arch = new User(
+            Alias = 'standt', 
+            Email='standarduser@testorg.com', 
+            EmailEncodingKey='UTF-8', 
+            FirstNAme='Test Arch',
+            LastName='Testing', 
+            LanguageLocaleKey='en_US', 
+            LocaleSidKey='en_US', 
+            ProfileId = p.Id, 
+            UserRoleId=archId.Id,
+            TimeZoneSidKey='America/Los_Angeles', 
+            UserName='testarchkaiken@testorg.com'
+        );
+        users.add(arch);
+
+        User consul = new User(
+            Alias = 'standt', 
+            Email='standarduser@testorg.com', 
+            EmailEncodingKey='UTF-8', 
+            FirstNAme='Test Consul',
+            LastName='Testing', 
+            LanguageLocaleKey='en_US', 
+            LocaleSidKey='en_US', 
+            ProfileId = p.Id, 
+            UserRoleId=consulId.Id,
+            TimeZoneSidKey='America/Los_Angeles', 
+            UserName='testconsulkaiken@testorg.com'
+        );
+        users.add(consul);
+
+        insert users;
+    }
+    
     private static Project__c setUpData(){
         Account acc = new Account(Name = 'TestAcc');
         insert acc;
         
-        Opportunity opp = new Opportunity(Name = 'testOpp', 
-                                          AccountId= acc.Id, 
-                                          Project_Manager__c = [
-                                              SELECT Id 
-                                              FROM User 
-                                              WHERE FirstName='Agustin' 
-                                              AND LastName='Perdomo'
-                                              LIMIT 1].Id,
-                                          StageName='Negotiation/Review',
-                                          CloseDate= Date.today().addDays(5));
+        Opportunity opp = new Opportunity(
+            Name = 'testOpp', 
+            AccountId= acc.Id, 
+            Project_Manager__c = [
+                SELECT Id 
+                FROM User 
+                WHERE FirstName='Agustin' 
+                AND LastName='Perdomo'
+                LIMIT 1].Id,
+            StageName='Negotiation/Review',
+            CloseDate= Date.today().addDays(5)
+        );
         insert opp;
         
 
         Date today = Date.today().addDays(10);
         //project
         Project__c newProject = new Project__c(
+            Name='Test Project',
             Opportunity__c = opp.Id,
             Account__c = opp.AccountId,
             Start_Date__c = today,
@@ -118,23 +207,23 @@ public with sharing class AllocationFilterControllerTest {
 
         insert newReqRoles;
 
-        User evaristoConsul = [
-            SELECT Id 
-            FROM User 
-            WHERE FirstName = 'Evaristo' 
-            AND LastName='Miller' 
-            LIMIT 1];
-
         Required_Role__c consulReqRole = [
             SELECT Id 
             FROM Required_Role__c 
             WHERE Project__c =: newProject.Id 
             AND Name = 'Consultants' 
             LIMIT 1];
-
+        
+		User consul = [
+            SELECT Id 
+            FROM User 
+            WHERE FirstName = 'Test Consul' 
+            AND LastName='Testing' 
+            LIMIT 1];
+        
        	Resource_Allocation__c newResourceAlloc = new Resource_Allocation__c(
             Name='Evaristo Consul Allocation',
-         	Resources__c= evaristoConsul.Id,
+         	Resources__c= consul.Id,
          	Required_Role__c = consulReqRole.Id,
          	StartDate__c = today.addDays(15),
           	EndDate__c = today.addDays(25)

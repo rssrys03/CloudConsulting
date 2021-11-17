@@ -13,16 +13,16 @@ const ERROR_TITLE = "Error";
 const ERROR_VARIANT = "error";
 
 export default class Users extends LightningElement {
-  @api role;
-  @api project;
-  @api totalCoverage;
-  @api requiredRoleObjId;
+  @api role; // role name de la tab actual
+  @api project; // projectId
+  @api totalCoverage; //array con data de horas requeridas
+  @api requiredRoleObjId; //requiredRole record Id que pertenece a este proyecto
   
   isLoading = true;
-  selectedUsersIds = [];
+  selectedUsersIds = []; //checkbox in datatable data
   requiredHours;
   totalCovered;
-  data;
+  data; //users data para datatable
   wiredResult;
 
   columns = [
@@ -55,7 +55,8 @@ export default class Users extends LightningElement {
   connectedCallback() {
     this.loadData();
   }
-
+  
+  //carga de horas por rol
   @api loadData() {
     console.log(JSON.parse(JSON.stringify(this.totalCoverage)));
 
@@ -72,7 +73,8 @@ export default class Users extends LightningElement {
         : 0;
     console.log("TOTAL COVERED", this.totalCovered);
   }
-
+  
+  //traer usuarios disponibles para alocar
   @wire(checkAllocatedResources, { projectID: "$project", roleName: "$role" })
   // eslint-disable-next-line no-unused-vars
   availableUsers(result) {
@@ -82,10 +84,12 @@ export default class Users extends LightningElement {
       this.data = result.data;
       this.isLoading = false;
     } else {
-      this.data = [];
+      this.data = null;
+      this.isLoading = false;
     }
   }
-
+  
+  // handle select en checkbox
   handleSelect(e) {
     let selectedUsers = JSON.parse(JSON.stringify(e.detail.selectedRows));
     this.selectedUsersIds = selectedUsers.map((userData) => userData.Id);
